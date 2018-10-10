@@ -46,9 +46,6 @@ test:  $(TESTS)
 	perf stat --repeat 100 \
                 -e cache-misses,cache-references,instructions,cycles \
                 ./test_cpy --bench $(TEST_DATA)
-	perf stat --repeat 100 \
-                -e cache-misses,cache-references,instructions,cycles \
-				./test_ref --bench $(TEST_DATA)
 
 bench: $(TESTS)
 	@for test in $(TESTS); do\

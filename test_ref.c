@@ -52,6 +52,9 @@ int main(int argc, char **argv)
     char *pool = (char *) malloc(poolsize * sizeof(char));
     char *Top = pool;
     while ((rtn = fscanf(fp, "%s", Top)) != EOF) {
+        size_t length = strlen(Top);
+        if (Top[length - 1] == ',')
+            Top[length - 1] = '\0';
         char *p = Top;
         /* insert reference to each string */
         if (!tst_ins_del(&root, &p, INS, REF)) { /* fail to insert */
@@ -67,6 +70,20 @@ int main(int argc, char **argv)
     t2 = tvgetf();
     fclose(fp);
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
+
+    if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
+        int stat = bench_test(root, BENCH_TEST_FILE, LMAX);
+        tst_free_all(root);
+        return stat;
+    }
+
+    FILE *output;
+    output = fopen("ref.txt", "a");
+    if (output != NULL) {
+        fprintf(output, "%.6f\n", t2 - t1);
+        fclose(output);
+    } else
+        printf("open file error\n");
 
     for (;;) {
         char *p;

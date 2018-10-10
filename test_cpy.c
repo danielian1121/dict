@@ -40,6 +40,9 @@ int main(int argc, char **argv)
 
     t1 = tvgetf();
     while ((rtn = fscanf(fp, "%s", word)) != EOF) {
+        size_t length = strlen(word);
+        if (word[length - 1] == ',')
+            word[length - 1] = '\0';
         char *p = word;
         if (!tst_ins_del(&root, &p, INS, CPY)) {
             fprintf(stderr, "error: memory exhausted, tst_insert.\n");
